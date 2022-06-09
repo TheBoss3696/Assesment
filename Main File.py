@@ -1,6 +1,6 @@
 
 from tkinter import *
-from tkinter import messagebox
+from tkinter.messagebox import showinfo
 from tkinter import ttk
 
 
@@ -33,7 +33,7 @@ def append_name():
     global store_details, entry_cname, entry_rnumber, entry_ihired, entry_numhired, total_entries, entries
 
     # Lists all possible boxes able to be filled and adds it to the rows
-    entries = [entry_cname, entry_rnumber, entry_ihired, entry_numhired]
+    entries = str([entry_cname, entry_rnumber, entry_ihired, entry_numhired])
     store_details.append([entry_cname.get(), entry_rnumber.get(), entry_ihired.get(), entry_numhired.get()])
     entry_cname.delete(0, 'end')
     entry_rnumber.delete(0, 'end')
@@ -60,8 +60,9 @@ def delete_row():
 
 # create the buttons and labels
 def setup_buttons():
-    global store_details, entry_cname, entry_rnumber, entry_ihired, entry_numhired, total_entries, delete_item
+    global store_details, entry_cname, entry_rnumber, entry_ihired, entry_numhired, total_entries, delete_item, Combobox
     Button(mw, text="Quit", command=quit).grid(column=3, row=1)
+    Button(mw, text="Reciept Print", command=items_selected).grid(column=3, row=2)
     Button(mw, text="Append Details", command=append_name).grid(column=0, row=1)
     Button(mw, text="Print Details", command=print_store_details).grid(column=1, row=1)
     Label(mw, text="Name").grid(column=0, row=2)
@@ -82,6 +83,17 @@ def setup_buttons():
     delete_item.grid(column=1, row=6)
     Button(mw, text="Delete", command=delete_row).grid(column=2, row=6)
 
+def items_selected():
+    """ handle item selected event
+    """
+    # get selected items
+
+    msg = f'You selected: '+ (entries)
+
+    showinfo(
+        title='Your Reciept',
+        message=msg)
+
 
 # start the program running
 def main():
@@ -92,6 +104,7 @@ def main():
     mw = Tk()
     mw.title("Julies Party Hire Store")
     setup_buttons()
+    mw.resizable(False, False)
     mw.mainloop()
 
 
