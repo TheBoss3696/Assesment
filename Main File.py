@@ -1,20 +1,11 @@
-
 from tkinter import *
-from tkinter.messagebox import showinfo
+from tkinter import messagebox
 from tkinter import ttk
 
 
 # quit subroutine
 def quit():
     mw.destroy()
-
-def incorrect_use():
-# Message to say incorect term
-    msg = f'Incorrect use:'
-
-    showinfo(
-        title='Your Reciept',
-        message=msg)
 
 def print_store_details():
     global item_count, total_entries
@@ -36,32 +27,6 @@ def print_store_details():
 
 
 # This allows the user to Append the details
-def error():
-    global store_details, entry_customer_name, entry_receipt_number, entry_item_hired, entry_number_items_hired, total_entries, entries
-    if entry_customer_name != str:
-        incorrect_use()
-    else:
-        pass
-
-    if entry_receipt_number != int:
-        incorrect_use()
-    else:
-        pass
-
-    if entry_item_hired != str:
-        incorrect_use()
-    else:
-        pass
-    if entry_number_items_hired != int:
-        incorrect_use()
-    else:
-        append_name()
-
-
-
-
-
-
 
 def append_name():
     global store_details, entry_customer_name, entry_receipt_number, entry_item_hired, entry_number_items_hired, total_entries, entries
@@ -76,6 +41,36 @@ def append_name():
     entry_number_items_hired.delete(0, 'end')
     total_entries += 1
 
+
+
+
+
+def check_inputs():
+    # these are the global variables that are used
+    global entry_customer_name, entry_receipt_number, entry_item_hired, entry_number_items_hired, total_entries
+    input_check = 0
+    Label(mw, text="               ").grid(column=2, row=0)
+    Label(mw, text="               ").grid(column=2, row=1)
+    Label(mw, text="               ").grid(column=2, row=2)
+    Label(mw, text="               ").grid(column=2, row=3)
+    # Check that customer name is not blank, set error text if blank
+    if len(entry_customer_name.get()) == 0:
+        Label(mw, fg="red", text="Required").grid(column=2, row=0)
+        input_check = 1
+    # Check that receipt number is not blank, set error text if blank
+    if len(entry_receipt_number.get()) == 0:
+        Label(mw, fg="red", text="Required").grid(column=2, row=1)
+        input_check = 1
+    # Check the number of hired items is not blank and between 1 and 200, set error text if blank
+    if entry_number_items_hired.get().isdigit():
+        if int(entry_number_items_hired.get()) < 1 or int(entry_number_items_hired.get()) > 500:
+            Label(mw, fg="red", text="Number required").grid(column=2, row=3)
+            input_check = 1
+    else:
+        Label(mw, fg="red", text="1-200 only").grid(column=2, row=3)
+        input_check = 1
+    if input_check == 0:
+        append_name()
 
 
 # delete a row from the list
@@ -97,49 +92,42 @@ def delete_row():
 def setup_buttons():
     global store_details, entry_customer_name, entry_receipt_number, entry_item_hired, entry_number_items_hired, total_entries, delete_item, Combobox
     Button(mw, text="Quit", command=quit).grid(column=3, row=2)
-    Button(mw, text="Receipt Print", command=items_selected).grid(column=3, row=3)
-    Button(mw, text="Append Details", command=append_name).grid(column=3, row=4)
+    #Button(mw, text="Receipt Print", command=new_window()).grid(column=3, row=3)
+    Button(mw, text="Append Details", command=check_inputs).grid(column=3, row=4)
     Button(mw, text="Print Details", command=print_store_details).grid(column=3, row=5)
-    Label(mw, text="Name").grid(column=0, row=2)
 
+    Label(mw, text="Name").grid(column=0, row=0)
     entry_customer_name = Entry(mw)
-    entry_customer_name.grid(column=1, row=2)
-    Label(mw, text="Receipt Number").grid(column=0, row=3)
+    entry_customer_name.grid(column=1, row=0)
+    Label(mw, text="Receipt Number").grid(column=0, row=1)
     entry_receipt_number = Entry(mw)
-    entry_receipt_number.grid(column=1, row=3)
+    entry_receipt_number.grid(column=1, row=1)
 
-    Label(mw, text="Item Hired").grid(column=0, row=4)
+    Label(mw, text="Item Hired").grid(column=0, row=2)
     item = StringVar()
     # Combo box to allow the user to scroll and choose different items
     entry_item_hired = ttk.Combobox(mw, textvariable=item, state="readonly", values=("BBQ LED_lights Balloons Party_animals"), width = 17)
-    entry_item_hired.grid(column=1, row=4)
+    entry_item_hired.grid(column=1, row=2)
 
-    Label(mw, text="NO. Hired").grid(column=0, row=5)
+    Label(mw, text="NO. Hired").grid(column=0, row=3)
     entry_number_items_hired = Entry(mw)
-    entry_number_items_hired.grid(column=1, row=5)
+    entry_number_items_hired.grid(column=1, row=3)
 
-    Label(mw, text="Row #").grid(column=0, row=6)
+    Label(mw, text="Row #").grid(column=0, row=4)
     delete_item = Entry(mw)
-    delete_item.grid(column=1, row=6)
-    Button(mw, text="Delete", command=delete_row).grid(column=2, row=6)
+    delete_item.grid(column=1, row=4)
+    Button(mw, text="Delete", command=delete_row).grid(column=2, row=5)
 
 
 # Creating a new window for receipt (Testing phase)
-def items_selected():
-    global entry_receipt_number
-    """ handle item selected event
-    """
-    # get selected items
-    new = Toplevel(mw)
-    new.geometry("500x500")
-    Label(new, text=("Your Reciept Number:" + entry_receipt_number))
+#def new_window():
+ #   global entry_receipt_number
+  #  # get selected items
+   # new = Toplevel(mw)
+    #new.geometry("500x500")
+    #Label(new, text=("Your Reciept Number:" + entry_receipt_number))
 
 
-    msg = f'You selected: hi'
-
-    showinfo(
-        title='Your Reciept',
-        message=msg)
 
 
 # start the program running
