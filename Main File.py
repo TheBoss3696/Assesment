@@ -40,7 +40,7 @@ def append_name():
     # This clears out the old information after the details have been appended
     entry_customer_name.delete(0, 'end')
     entry_receipt_number.delete(0, 'end')
-    entry_item_hired.delete(0, 'end')
+    entry_item_hired.set("")
     entry_number_items_hired.delete(0, 'end')
     total_entries += 1
 
@@ -75,12 +75,13 @@ def check_inputs():
     input_check = 0
     Label(mw, text="                                  ",bg=bg).grid(column=2, row=2)
     Label(mw, text="                                  ",bg=bg).grid(column=2, row=3)
+    Label(mw, text="                                  ",bg=bg).grid(column=5, row=2)
     Label(mw, text="                                  ",bg=bg).grid(column=5, row=3)
-    Label(mw, text="                                  ",bg=bg).grid(column=2, row=5)
     # Check that customer name is not blank, set error text if blank
-    if (entry_customer_name.get()) == "Full Name":
+    if (entry_customer_name.get()) == "Full Name" or len(entry_customer_name.get()) == 0:
         Label(mw, fg="red", text="Required",bg=bg).grid(column=2, row=2,sticky="w")
         input_check = 1
+        # To check if the user had inputted a number instead of text
     if (entry_customer_name.get().isdigit()) == True:
         Label(mw, fg="red", text="Text required",bg=bg).grid(column=2, row=2,sticky="w")
         input_check = 1
@@ -89,19 +90,23 @@ def check_inputs():
         if len(entry_receipt_number.get()) == 6:
             Label(mw, fg="red", text="Required",bg=bg).grid(column=2, row=3,sticky="w")
             input_check = 1
+            # If the receipt number was incorrect
     else:
-        Label(mw, fg="red", text="6 digits only",bg=bg).grid(column=2, row=3,sticky="w")
+        Label(mw, fg="red", text="Digits only",bg=bg).grid(column=2, row=3,sticky="w")
         input_check = 1
 
-    # Check the number of hired items is not blank and between 1 and 200, set error text if blank
+    # Check the number of hired items is not blank and between 1 and 500, set error text if blank
     if entry_number_items_hired.get().isdigit():
         if int(entry_number_items_hired.get()) < 1 or int(entry_number_items_hired.get()) > 500:
-            Label(mw, fg="red", text="1-500 only",bg=bg).grid(column=5, row=3,sticky="w")
+            Label(mw, fg="red", text="1-500 only", bg=bg).grid(column=5, row=3,sticky="w")
             input_check = 1
+            # if text was added instead of numbers
     else:
         Label(mw, text="            ").grid(column=5, row=3)
         Label_a = Label(mw, fg="red", text="Numbers Requires",bg=bg).grid(column=5, row=3,sticky="w")
         input_check = 1
+    if len(entry_item_hired.get()) == 0:
+        Label(mw, fg="red", text="Select item", bg=bg).grid(column=5, row=2, sticky="w")
     if input_check == 0:
         append_name()
         invis_text()
@@ -114,57 +119,48 @@ def delete_row():
     total_entries = total_entries - 1
     delete_item.delete(0, 'end')
     # This deletes each items label
-    Label(mw, text="              ").grid(column=0, row=item_count + 7)
-    Label(mw, text="              ").grid(column=1, row=item_count + 7)
-    Label(mw, text="              ").grid(column=2, row=item_count + 7)
-    Label(mw, text="              ").grid(column=3, row=item_count + 7)
-    Label(mw, text="              ").grid(column=4, row=item_count + 7)
+    Label(mw, text="                                    ", bg=bg).grid(column=0, row=item_count + 7)
+    Label(mw, text="                                    ", bg=bg).grid(column=1, row=item_count + 7)
+    Label(mw, text="                                    ", bg=bg).grid(column=2, row=item_count + 7)
+    Label(mw, text="                                    ", bg=bg).grid(column=3, row=item_count + 7)
+    Label(mw, text="                                    ", bg=bg).grid(column=4, row=item_count + 7)
     print_store_details()
 
 
 # create the buttons and labels
 def setup_buttons():
-    global store_details, entry_customer_name, entry_receipt_number, entry_item_hired, entry_number_items_hired, total_entries, delete_item, Combobox
-    Button(mw, text="Quit", command=quit, width=10, bg='red').grid(column=5, row=0, pady=pady_entries)
-    # Button(mw, text="Receipt Print", command=new_window()).grid(column=3, row=3)
+    global store_details, entry_customer_name, entry_receipt_number, entry_item_hired, entry_number_items_hired, item, total_entries, delete_item, Combobox
+    item = StringVar()
+    # Buttons
+    Button(mw, text="Quit", command=quit, width=10, bg='red', font="Times 12 bold").grid(column=5, row=0, pady=pady_entries,sticky="NW")
     Button(mw, text="Append Details", command=check_inputs).grid(column=1, row=5, pady=pady_entries)
     Button(mw, text="Print Details", command=print_store_details).grid(column=3, row=5, pady=pady_entries)
-
+    # Label name
     Label(mw, text="Name").grid(column=0, row=2, padx=padx_entries)
     entry_customer_name = Entry(mw)
     entry_customer_name.grid(column=1, row=2, pady=pady_entries)
+    # label receipt number
     Label(mw, text="Receipt Number").grid(column=0, row=3, padx=padx_entries)
     entry_receipt_number = Entry(mw)
     entry_receipt_number.grid(column=1, row=3, pady=pady_entries)
-
+    # label item hired
     Label(mw, text="Item Hired").grid(column=3, row=2, padx=padx_entries)
-    item = StringVar()
-    # Combo box to allow the user to scroll and choose different items
-    entry_item_hired = ttk.Combobox(mw, textvariable=item, state="readonly",
-                                    values=("BBQ LED_lights Balloons Party_animals"), width=17)
-    entry_item_hired.grid(column=4, row=2, pady=pady_entries)
 
+    # Combo box to allow the user to scroll and choose different items
+    entry_item_hired = ttk.Combobox(mw, textvariable=item, state="readonly", width=17)
+    entry_item_hired["values"]=("BBQ", "LED_lights","Balloons Party_animals")
+    entry_item_hired.grid(column=4, row=2, pady=pady_entries)
+    # label for number hired
     Label(mw, text="NO. Hired").grid(column=3, row=3, padx=padx_entries)
     entry_number_items_hired = Entry(mw)
     entry_number_items_hired.grid(column=4, row=3, pady=pady_entries)
-
+    # delete row
     Label(mw, text="Row #").grid(column=0, row=4, padx=padx_entries)
     delete_item = Entry(mw)
     delete_item.grid(column=1, row=4, pady=pady_entries)
-    Button(mw, text="Delete", command=delete_row, padx=8).grid(column=2, row=4,sticky="W")
-
-    Label(mw, text="Julies Store",font="bold",width = 12).grid( column=2, row=0,padx=20, pady=20)
-
-
-
-# Creating a new window for receipt (Testing phase)
-# def new_window():
-#   global entry_receipt_number
-#  # get selected items
-# new = Toplevel(mw)
-# new.geometry("500x500")
-# Label(new, text=("Your Reciept Number:" + entry_receipt_number))
-
+    Button(mw, text="Delete", command=delete_row, padx=8).grid(column=2, row=4, sticky="W")
+    # Main store label
+    Label(mw, text="Julies Store",font="Times 20 bold",width=12).grid(column=2, row=0, padx=20, pady=20, sticky="N")
 
 # start the program running
 def main():
@@ -173,6 +169,7 @@ def main():
     store_details = []
     total_entries = 0
     mw = Tk()
+    # variables to help easily change small things such as colour and spacing for entries/labels
     bg = "cyan"
     pady_entries = 2
     padx_entries = 2
