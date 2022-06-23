@@ -73,10 +73,10 @@ def check_inputs():
     # these are the global variables that are used
     global entry_customer_name, entry_receipt_number, entry_item_hired, entry_number_items_hired, total_entries
     input_check = 0
-    Label(mw, text="                                  ",bg=bg).grid(column=2, row=2)
-    Label(mw, text="                                  ",bg=bg).grid(column=2, row=3)
-    Label(mw, text="                                  ",bg=bg).grid(column=5, row=2)
-    Label(mw, text="                                  ",bg=bg).grid(column=5, row=3)
+    Label(mw, text="                                  ", bg=bg).grid(column=2, row=2)
+    Label(mw, text="                                  ", bg=bg).grid(column=2, row=3)
+    Label(mw, text="                                  ", bg=bg).grid(column=5, row=2)
+    Label(mw, text="                                  ", bg=bg).grid(column=5, row=3)
     # Check that customer name is not blank, set error text if blank
     if (entry_customer_name.get()) == "Full Name" or len(entry_customer_name.get()) == 0:
         Label(mw, fg="red", text="Required",bg=bg).grid(column=2, row=2,sticky="w")
@@ -148,7 +148,8 @@ def setup_buttons():
 
     # Combo box to allow the user to scroll and choose different items
     entry_item_hired = ttk.Combobox(mw, textvariable=item, state="readonly", width=17)
-    entry_item_hired["values"]=("BBQ", "LED_lights","Balloons Party_animals")
+    entry_item_hired["values"] = ("BBQ", "LED lights", "Balloons", "Party Animals", "Bar Fridge", "LED Bench Set",
+                                  "Birthday Pack", "Confetti", "Cups", "Pool Toys", "Inflatable Pool", "Helium Balloons")
     entry_item_hired.grid(column=4, row=2, pady=pady_entries)
     # label for number hired
     Label(mw, text="NO. Hired").grid(column=3, row=3, padx=padx_entries)
@@ -173,7 +174,7 @@ def main():
     bg = "cyan"
     pady_entries = 2
     padx_entries = 2
-    # The Title
+    # The Title of the window
     mw.title("Julies Party Hire Store")
     mw.configure(bg='cyan')
     setup_buttons()
